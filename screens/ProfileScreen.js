@@ -1,30 +1,59 @@
-// screens/ProfileScreen.js
-import { View, Text, StyleSheet } from 'react-native';
-import { useState } from 'react';
-import { Ionicons } from '@expo/vector-icons'; 
-import { COLORS, SPACING, RADII, FONTS } from '../theme';
+import { View, Text, StyleSheet, Pressable } from 'react-native'; 
+import { useState } from 'react'; 
+import { Ionicons } from '@expo/vector-icons';
+import { COLORS, SPACING, RADII, FONTS } from '../theme'; 
 
 export default function ProfileScreen() {
-  const [theme, setTheme] = useState('light');
-  const currentTheme = COLORS[theme];
+  const [theme, setTheme] = useState('light'); 
+  const currentTheme = COLORS[theme]; 
+  
+  
+  const toggleTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light'); 
+  };
 
   return (
-    <View style={[styles.container, { backgroundColor: currentTheme.bg }]}>
-      <View style={[
-        styles.card,
-        { backgroundColor: currentTheme.card } 
-      ]}>
+    <View style={[styles.container, { backgroundColor: currentTheme.bg }]}> 
+      
+      <Pressable
+        onPress={toggleTheme} 
+        style={styles.themeToggle} 
+      >
         <Ionicons
-          name="person-circle-outline"
-          size={80}
+          name={theme === 'light' ? 'moon' : 'sunny'}
+          size={28} 
           color={currentTheme.text} 
         />
-        <Text style={[styles.name, { color: currentTheme.text }]}>
+      </Pressable>
+
+     
+      <View style={[
+        styles.card,
+        { backgroundColor: currentTheme.card }
+      ]}>
+        <Ionicons
+          name="person-circle-outline" 
+          size={80} 
+          color={currentTheme.text} 
+        />
+        <Text style={[styles.name, { color: currentTheme.text }]}> 
           John Doe
         </Text>
-        <Text style={[styles.role, { color: currentTheme.text }]}>
+        <Text style={[styles.role, { color: currentTheme.text }]}> 
           Mobile Developer
         </Text>
+
+        {/* Like Button (Beğen Düğmesi) */} 
+        <Pressable
+          style={({ pressed }) => [ // Basılma durumuna göre renk değiştirme [cite: 340]
+            styles.likeButton, 
+            { backgroundColor: pressed ? '#e63946' : '#ff6b6b' }
+          ]}
+          onPress={() => console.log('Profile Liked!')} // Tıklandığında konsola yaz [cite: 344]
+        >
+          <Ionicons name="heart" size={24} color="#fff" /> 
+          <Text style={styles.likeText}>Like</Text>
+        </Pressable>
       </View>
     </View>
   );
@@ -32,32 +61,53 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flex: 1, 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+  },
+  themeToggle: {
+    position: 'absolute', 
+    top: 50, 
+    right: 20, 
+    padding: SPACING.sm, 
   },
   card: {
-    width: '85%',
-    borderRadius: RADII.md, // Köşe yuvarlaklığını jetondan al [cite: 215]
-    alignItems: 'center',
-    padding: SPACING.lg, // Boşluğu jetondan al [cite: 217]
-    // **iOS Gölgesi** [cite: 218]
-    shadowColor: '#000',
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 4 },
-    // **Android Gölgesi** [cite: 223]
-    elevation: 6,
+    width: '85%', 
+    borderRadius: RADII.md, 
+    alignItems: 'center', 
+    padding: SPACING.lg, 
+    
+    shadowColor: '#000', 
+    shadowOpacity: 0.15, 
+    shadowRadius: 8, 
+    shadowOffset: { width: 0, height: 4 }, 
+  
+    elevation: 6, 
   },
   name: {
-    fontFamily: FONTS.bold,
-    fontSize: 24,
-    marginTop: SPACING.md, // Boşluğu jetondan al [cite: 229]
+    fontFamily: FONTS.bold, 
+    fontSize: 24, 
+    marginTop: SPACING.md, 
   },
   role: {
-    fontFamily: FONTS.regular,
-    fontSize: 16,
-    marginTop: SPACING.sm, // Boşluğu jetondan al [cite: 235]
-    opacity: 0.7,
+    fontFamily: FONTS.regular, 
+    fontSize: 16, 
+    marginTop: SPACING.sm, 
+    opacity: 0.7, 
+  },
+  // LIKE BUTTON STILLERİ [cite: 350]
+  likeButton: {
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    paddingVertical: SPACING.sm, 
+    paddingHorizontal: SPACING.lg, 
+    borderRadius: 50, 
+    marginTop: SPACING.md, 
+  },
+  likeText: {
+    color: '#fff', 
+    fontFamily: FONTS.bold, 
+    fontSize: 16, 
+    marginLeft: SPACING.sm, 
   },
 });
